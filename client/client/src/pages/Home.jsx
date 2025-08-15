@@ -4,13 +4,11 @@ import Slider from '../components/Slider.jsx'
 import ProductList from '../components/ProductList.jsx'
 import RecommendationPanel from '../components/RecommendationPanel.jsx'
 import Footer from '../components/Footer.jsx'
-import VisionSection from '../components/Vision.jsx'
 
 const Home = () => {
   return (
     <div>
     <Slider />
-    <VisionSection />
     <ProductList />
     <RecommendationPanel />
     </div>

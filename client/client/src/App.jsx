@@ -15,17 +15,15 @@ import { useContext } from 'react'// ✅ Import the actual provider
 import { CartProvider } from "./components/Cart.jsx";
 import About from "./components/About.jsx";
 import ContactUs from "./components/ContactUs.jsx";
-import ScrollToTop from "./components/ScrollToTop.jsx";
 
 function App() {
   const { showLogin } = useContext(AppContext); // Ensure AppContext is not undefined
 
   return (
     <CartProvider>
-      <div className='bg-gradient-to-b from-gray-400 to-gray-100 pt-20'>
+      <div className='bg-gradient-to-b from-gray-400 to-gray-100'>
         <ToastContainer position='bottom-right'/>
         <Navbar />
-        <ScrollToTop />
         {showLogin && <Login />}
         <Routes>
         <Route path="/" element={<Home />} />

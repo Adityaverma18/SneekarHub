@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
-import { data, useLocation, useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export const AppContext = createContext()
@@ -21,8 +21,6 @@ const AppContextProvider = (props)=>{
     const value ={
         user, setUser, showLogin, setShowLogin, backendUrl,
     }
-
-    
 
     return(
         <AppContext.Provider value={value}>

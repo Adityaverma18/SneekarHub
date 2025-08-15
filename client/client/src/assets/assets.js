@@ -1,4 +1,4 @@
-import logo from './images/logo.svg'
+import logo from './images/logo.jpg'
 import slider1 from './images/slider1.jpg'
 import slider2 from './images/slider2.jpg'
 import image1 from './images/image1.jpg'
@@ -12,8 +12,6 @@ import image6 from './images/image6.jpg'
 export const assetsImage ={
   logo,image1,image2,image3,image4,image5, image6,slider1, slider2, 
 }
-
-
 
 // Complete slider assets configuration
 export const sliderAssets = {
@@ -68,104 +66,103 @@ export const sliderAssets = {
 };
 
 // Products data
-export const products = [
-  {
-    id: 1,
-    name: 'Nike Airforce 1',
-    title: "Premium Sneakers Collection",
-    description: 'Comfortable running shoes',
-    price: 99.99,
-    image: assetsImage.image1,
-    features: [
-      'Breathable mesh upper',
-      'Air cushioning',
-      'Lightweight design'
-    ],
-    colors: ['White', 'Black', 'Red'],
-    sizes: ['US 7', 'US 8', 'US 9', 'US 10']
-  },
-  {
-    id: 2,
-    name: 'Nike Sumo 7',
-    title: "Summer Sports Footwear",
-    description: 'Light Weight',
-    price: 159.99,
-    image: assetsImage.image2,
-    features: [
-      'Breathable mesh',
-      'Shock absorption',
-      'Flexible sole'
-    ],
-    colors: ['Black', 'Blue', 'Gray'],
-    sizes: ['US 7', 'US 8', 'US 9', 'US 10', 'US 11']
-  },
-  {
-    id: 3,
-    name: 'Addidas Flight 2',
-    title: "New Arrival",
-    description: 'Track ready shoes',
-    price: 129.99,
-    image: assetsImage.image3,
-    features: [
-      'Elastic laces',
-      'Air cushioning',
-      'Anti-slip sole'
-    ],
-    colors: ['White', 'Red', 'black'],
-    sizes: ['US 8', 'US 9', 'US 10']
-  },
-  {
-    id: 4,
-    name: 'Puma RS-X',
-    description: 'Bold style meets ultimate comfort',
-    price: 109.99,
-    image: assetsImage.image4,
-    features: ['Chunky design', 'Bold colorway', 'Rubber outsole'],
-    colors: ['Yellow', 'Black', 'White'],
-    sizes: ['US 7', 'US 8', 'US 9', 'US 10']
-  },
-  {
-    id: 5,
-    name: 'Reebok Zig Kinetica',
-    description: 'Built for energy return and stability',
-    price: 139.99,
-    image: assetsImage.image5,
-    features: ['Energy return sole', 'Mesh upper', 'Stylish silhouette'],
-    colors: ['Blue', 'Gray'],
-    sizes: ['US 6', 'US 7', 'US 8', 'US 9']
-  },
-  {
-    id: 6,
-    name: 'New Balance 327',
-    description: 'Retro vibes with modern comfort',
-    price: 119.99,
-    image: assetsImage.image6,
-    features: ['Retro design', 'Cushioned midsole', 'Durable outsole'],
-    colors: ['Green', 'Orange', 'Black'],
-    sizes: ['US 8', 'US 9', 'US 10', 'US 11']
-  },
-  {
-    id: 7,
-    name: 'Nike Air Max 270',
-    description: 'Iconic air bubble comfort',
-    price: 149.99,
-    image: assetsImage.image1,
-    features: ['Visible Air unit', 'Sleek look', 'Everyday wear'],
-    colors: ['Black', 'White', 'Volt'],
-    sizes: ['US 6', 'US 8', 'US 10', 'US 12']
-  },
-  {
-    id: 8,
-    name: 'Adidas Ultraboost 22',
-    description: 'Performance and style in one',
-    price: 179.99,
-    image: assetsImage.image2,
-    features: ['Primeknit upper', 'Boost cushioning', 'Running optimized'],
-    colors: ['Core Black', 'Cloud White'],
-    sizes: ['US 7', 'US 8', 'US 9', 'US 10', 'US 11']
-  }
-];
-export const assets = {products};
+export const assets = {
+  products: [
+    {
+      id: 1,
+      name: 'Nike Airforce 1',
+      description: 'Killer looks',
+      price: 99.99,
+      image: assetsImage.image1,
+      features: [
+        'Light Weighted',
+        'Comfortable',
+        'Trendy'
+      ],
+      colors: ['White', 'Black', 'Red'],
+      sizes: ['US 7', 'US 8', 'US 9', 'US 10']
+    },
+    {
+      id: 2,
+      name: 'Nike Sumo 7',
+      description: 'Light Weight',
+      price: 159.99,
+      image: assetsImage.image2,
+      features: [
+        'Breathable mesh',
+        'Shock absorption',
+        'Flexible sole'
+      ],
+      colors: ['Black', 'Blue', 'Gray'],
+      sizes: ['US 7', 'US 8', 'US 9', 'US 10', 'US 11']
+    },
+    {
+      id: 3,
+      name: 'Addidas Flight 2',
+      description: 'Track ready shoes',
+      price: 129.99,
+      image: assetsImage.image3,
+      features: [
+        'Elastic laces', 
+        'Air cushioning',
+        'Anti-slip sole'
+      ],
+      colors: ['White', 'Red','black'],
+      sizes: ['US 8', 'US 9', 'US 10']
+    },
+    {
+  id: 4,
+  name: 'Puma RS-X',
+  description: 'Bold style meets ultimate comfort',
+  price: 109.99,
+  image: assetsImage.image4,
+  features: ['Chunky design', 'Bold colorway', 'Rubber outsole'],
+  colors: ['Yellow', 'Black', 'White'],
+  sizes: ['US 7', 'US 8', 'US 9', 'US 10']
+},
+{
+  id: 5,
+  name: 'Reebok Zig Kinetica',
+  description: 'Built for energy return and stability',
+  price: 139.99,
+  image: assetsImage.image5,
+  features: ['Energy return sole', 'Mesh upper', 'Stylish silhouette'],
+  colors: ['Blue', 'Gray'],
+  sizes: ['US 6', 'US 7', 'US 8', 'US 9']
+},
+{
+  id: 6,
+  name: 'New Balance 327',
+  description: 'Retro vibes with modern comfort',
+  price: 119.99,
+  image: assetsImage.image6,
+  features: ['Retro design', 'Cushioned midsole', 'Durable outsole'],
+  colors: ['Green', 'Orange', 'Black'],
+  sizes: ['US 8', 'US 9', 'US 10', 'US 11']
+},
+{
+  id: 7,
+  name: 'Nike Air Max 270',
+  description: 'Iconic air bubble comfort',
+  price: 149.99,
+  image: image1,
+  features: ['Visible Air unit', 'Sleek look', 'Everyday wear'],
+  colors: ['Black', 'White', 'Volt'],
+  sizes: ['US 6', 'US 8', 'US 10', 'US 12']
+},
+{
+  id: 8,
+  name: 'Adidas Ultraboost 22',
+  description: 'Performance and style in one',
+  price: 179.99,
+  image: image2,
+  features: ['Primeknit upper', 'Boost cushioning', 'Running optimized'],
+  colors: ['Core Black', 'Cloud White'],
+  sizes: ['US 7', 'US 8', 'US 9', 'US 10', 'US 11']
+}
+  ]
+};
+
 
 export const aboutData = {
   hero: {
@@ -327,85 +324,5 @@ export const contactData = {
   ]
 };
 
-// Vision Section Assets
-export const visionAssets = {
-  mainVision: {
-    title: "Revolutionizing Sneaker Culture",
-    description: "We're not just selling shoes - we're building a community where style meets authenticity, where every step tells a story, and where sneaker enthusiasts find their perfect match."
-  },
-  
-  projectStory: {
-    title: "Our Project Story",
-    content: [
-      "What started as a college dorm room passion project has evolved into something extraordinary. We noticed a gap in the market - authentic sneaker lovers were struggling to find genuine, limited-edition releases without paying inflated reseller prices.",
-      "Our mission became clear: create a platform that connects sneaker enthusiasts with the shoes they love, while maintaining authenticity and fair pricing. We're not just another e-commerce site; we're a community-driven marketplace built by sneakerheads, for sneakerheads.",
-      "Today, Sneekrr represents the intersection of technology and street culture, where cutting-edge web development meets the timeless appeal of premium footwear."
-    ],
-    highlights: [
-      "100% Authentic Products Guaranteed",
-      "Direct Partnerships with Major Brands", 
-      "Community-Driven Reviews & Ratings",
-      "Exclusive Early Access to Limited Drops",
-      "Sustainable Packaging & Shipping",
-      "24/7 Customer Support from Sneaker Experts"
-    ]
-  },
-
-  visionCards: [
-    {
-      icon: "🚀",
-      title: "Innovation First",
-      description: "Leveraging the latest technology to create seamless shopping experiences. From AI-powered recommendations to AR try-on features, we're always pushing boundaries."
-    },
-    {
-      icon: "🤝",
-      title: "Community Driven",
-      description: "Built by sneaker enthusiasts for sneaker enthusiasts. Every feature, every partnership, every decision is made with our community's passion in mind."
-    },
-    {
-      icon: "🌱",
-      title: "Sustainable Future",
-      description: "Committed to environmental responsibility through eco-friendly packaging, carbon-neutral shipping, and partnerships with sustainable brands."
-    }
-  ],
-
-  stats: [
-    {
-      number: "50K+",
-      label: "Happy Customers"
-    },
-    {
-      number: "500+",
-      label: "Sneaker Models"
-    },
-    {
-      number: "99.9%",
-      label: "Authenticity Rate"
-    },
-    {
-      number: "24/7",
-      label: "Customer Support"
-    }
-  ],
-
-  futureGoals: [
-    {
-      title: "Global Expansion",
-      description: "Bringing authentic sneaker culture to sneaker enthusiasts worldwide with localized experiences and regional partnerships."
-    },
-    {
-      title: "AR Technology Integration", 
-      description: "Implementing cutting-edge AR technology so customers can virtually try on sneakers before purchasing, reducing returns and increasing satisfaction."
-    },
-    {
-      title: "Sustainability Initiative",
-      description: "Achieving carbon-neutral operations and partnering with eco-conscious brands to promote sustainable fashion in the sneaker industry."
-    },
-    {
-      title: "Community Platform",
-      description: "Building a social platform where sneaker enthusiasts can share collections, trade rare finds, and connect with fellow collectors globally."
-    }
-  ]
-};
 
 
