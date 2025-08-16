@@ -16,6 +16,7 @@ import { CartProvider } from "./components/Cart.jsx";
 import About from "./components/About.jsx";
 import ContactUs from "./components/ContactUs.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import SearchPage from "./components/Search.jsx";
 
 function App() {
   const { showLogin } = useContext(AppContext); // Ensure AppContext is not undefined
@@ -34,6 +35,7 @@ function App() {
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/about" element={<About />} /> 
         <Route path="/contact" element ={<ContactUs />} />
+        <Route path="/search" element ={<SearchPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
         <Footer />

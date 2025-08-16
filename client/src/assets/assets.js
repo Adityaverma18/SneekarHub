@@ -1,6 +1,7 @@
 import logo from './images/logo.svg'
 import slider1 from './images/slider1.jpg'
 import slider2 from './images/slider2.jpg'
+import slider3 from './images/slider3.jpeg'
 import image1 from './images/image1.jpg'
 import image2 from './images/image2.jpg'
 import image3 from './images/image3.jpg'
@@ -10,7 +11,7 @@ import image6 from './images/image6.jpg'
 
 // src/assets/assets.js
 export const assetsImage ={
-  logo,image1,image2,image3,image4,image5, image6,slider1, slider2, 
+  logo,image1,image2,image3,image4,image5, image6,slider1, slider2, slider3,
 }
 
 
@@ -166,6 +167,7 @@ export const products = [
   }
 ];
 export const assets = {products};
+export const searchSuggestions = products.map(product => product.name);
 
 export const aboutData = {
   hero: {

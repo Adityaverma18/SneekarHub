@@ -25,27 +25,41 @@ const Slider = () => {
   };
 
   return (
-    <div className="relative overflow-hidden" style={{ height: sliderAssets.styles.height }}>
+    <div
+      className="relative overflow-hidden"
+      style={{ height: '600px' }} // Increased height to 600px
+    >
       {/* Current Slide */}
-      <div key={slides[currentSlide].id} className="absolute inset-0 transition-opacity duration-500 ease-in-out opacity-100">
+      <div
+        key={slides[currentSlide].id}
+        className="absolute inset-0 transition-opacity duration-500 ease-in-out opacity-100 flex justify-center items-center"
+      >
         <img
           src={img[currentSlide]}
           alt={slides[currentSlide].alt}
-          className="w-full h-full object-cover"
+          className="max-w-full max-h-full object-contain"
           onError={(e) => {
             e.target.src = sliderAssets.fallbacks.image;
-            console.warn("Fallback image used");
+            console.warn('Fallback image used');
           }}
         />
-        <div className={`absolute inset-0 flex flex-col items-center justify-center ${sliderAssets.styles.overlay}`}>
-          <h1 className={`text-4xl md:text-6xl font-bold ${sliderAssets.styles.textColor} mb-4`}>
+        <div
+          className={`absolute inset-0 flex flex-col items-center justify-center ${sliderAssets.styles.overlay}`}
+        >
+          <h1
+            className={`text-4xl md:text-6xl font-bold ${sliderAssets.styles.textColor} mb-4`}
+          >
             {slides[currentSlide].title}
           </h1>
-          <p className={`text-xl md:text-2xl ${sliderAssets.styles.textColor} mb-8`}>
+          <p
+            className={`text-xl md:text-2xl ${sliderAssets.styles.textColor} mb-8`}
+          >
             {slides[currentSlide].subtitle}
           </p>
           {slides[currentSlide].cta && (
-            <button className={`py-3 px-6 rounded-lg text-lg ${sliderAssets.styles.buttonStyle}`}>
+            <button
+              className={`py-3 px-6 rounded-lg text-lg ${sliderAssets.styles.buttonStyle}`}
+            >
               {slides[currentSlide].cta}
             </button>
           )}
@@ -60,8 +74,19 @@ const Slider = () => {
             className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition-colors"
             aria-label="Previous slide"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
           </button>
           <button
@@ -69,8 +94,19 @@ const Slider = () => {
             className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition-colors"
             aria-label="Next slide"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </button>
         </>
@@ -83,7 +119,9 @@ const Slider = () => {
             <button
               key={slide.id}
               onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full ${index === currentSlide ? 'bg-white' : 'bg-gray-400'}`}
+              className={`w-3 h-3 rounded-full ${
+                index === currentSlide ? 'bg-white' : 'bg-gray-400'
+              }`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
