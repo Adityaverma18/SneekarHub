@@ -1,48 +1,78 @@
 // src/components/Slider.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { assetsImage, sliderAssets } from '../assets/assets';
 
 const Slider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const slides = sliderAssets.slides;
 
-  // Manually create image array from imported images
+  // Image array from imported images
   const img = [assetsImage.slider1, assetsImage.slider2, assetsImage.image1];
 
+  // Ref for autoplay interval
+  const intervalRef = useRef(null);
+
+  // Start autoplay
   useEffect(() => {
-    const interval = setInterval(() => {
-      handleNextSlide();
+    startAutoplay();
+    return () => stopAutoplay();
+  }, []);
+
+  const startAutoplay = () => {
+    if (intervalRef.current) return; // prevent multiple intervals
+    intervalRef.current = setInterval(() => {
+      setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     }, sliderAssets.settings.autoplaySpeed);
-    return () => clearInterval(interval);
-  }, [currentSlide]);
+  };
+
+  const stopAutoplay = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
 
   const handleNextSlide = () => {
+    stopAutoplay();
     setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    startAutoplay();
   };
 
   const handlePrevSlide = () => {
+    stopAutoplay();
     setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    startAutoplay();
   };
 
+  // Preload next and previous images
+  useEffect(() => {
+    const nextSlide = (currentSlide + 1) % slides.length;
+    const prevSlide = (currentSlide - 1 + slides.length) % slides.length;
+
+    [img[nextSlide], img[prevSlide]].forEach((src) => {
+      const image = new Image();
+      image.src = src;
+    });
+  }, [currentSlide]);
+
   return (
-    <div
-      className="relative overflow-hidden"
-      style={{ height: '600px' }} // Increased height to 600px
-    >
+    <div className="relative overflow-hidden" style={{ height: '600px' }}>
       {/* Current Slide */}
       <div
         key={slides[currentSlide].id}
-        className="absolute inset-0 transition-opacity duration-500 ease-in-out opacity-100 flex justify-center items-center"
+        className="absolute inset-0 flex justify-center items-center transition-opacity duration-500 ease-in-out opacity-100"
       >
         <img
           src={img[currentSlide]}
           alt={slides[currentSlide].alt}
           className="max-w-full max-h-full object-contain"
+          loading="lazy"
           onError={(e) => {
             e.target.src = sliderAssets.fallbacks.image;
             console.warn('Fallback image used');
           }}
         />
+
         <div
           className={`absolute inset-0 flex flex-col items-center justify-center ${sliderAssets.styles.overlay}`}
         >

@@ -38,11 +38,12 @@ const VisionSection = () => {
             {visionAssets.mainVision.description}
           </motion.p>
         </motion.div>
-
-        {/* Project Story */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+        {/* Project Story Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch mb-20">
+          
+          {/* Project Story */}
           <motion.div 
-            className="order-2 lg:order-1 bg-gray-50 p-8 rounded-3xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300"
+            className="flex flex-col bg-gray-50 p-8 rounded-3xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -51,55 +52,45 @@ const VisionSection = () => {
             <h3 className="text-4xl font-extrabold text-gray-900 mb-8 tracking-tight">
               {visionAssets.projectStory.title}
             </h3>
-            <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
+            <div className="space-y-6 text-lg text-gray-700 leading-relaxed flex-1">
               {visionAssets.projectStory.content.map((paragraph, index) => (
-                <p key={index}>
-                  {paragraph}
-                </p>
+                <p key={index}>{paragraph}</p>
               ))}
-            </div>
-
-            {/* Key Highlights */}
-            <div className="mt-10">
-              <h4 className="text-2xl font-semibold text-gray-900 mb-5">What Makes Us Different:</h4>
-              <ul className="space-y-4">
-                {visionAssets.projectStory.highlights.map((highlight, index) => (
-                  <li key={index} className="flex items-start">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center mr-4 mt-1">
-                      <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"/>
-                      </svg>
-                    </div>
-                    <span className="text-gray-800 text-lg">{highlight}</span>
-                  </li>
-                ))}
-              </ul>
             </div>
           </motion.div>
 
-          <motion.div
-            className="order-1 lg:order-2 rounded-3xl overflow-hidden shadow-xl space-y-5"
+          
+
+          {/* Highlights */}
+          <motion.div 
+            className="flex flex-col bg-gray-50 p-8 rounded-3xl shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
           >
-            <img 
-              src={assetsImage.slider1} 
-              alt="Our sneaker collection showcasing premium quality and style" 
-              className="w-full h-full object-cover rounded-3xl"
-              onError={(e) => e.target.src = 'https://placehold.co/600x400'}
-            />
-            <img 
-              src={assetsImage.slider3} 
-              alt="Our sneaker collection showcasing premium quality and style" 
-              className="w-full h-full object-cover rounded-3xl"
-              onError={(e) => e.target.src = 'https://placehold.co/600x400'}
-            />
-      
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-3xl"></div>
+            <h4 className="text-4xl font-extrabold text-gray-900 mb-8 tracking-tight">What Makes Us Different:</h4>
+            <ul className="space-y-4 flex-1">
+              {visionAssets.projectStory.highlights.map((highlight, index) => (
+                <li key={index} className="flex items-start">
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center mr-4 mt-1">
+                    <svg className="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path 
+                        fillRule="evenodd" 
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" 
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </div>
+                  <span className="text-gray-800 text-lg">{highlight}</span>
+                </li>
+              ))}
+            </ul>
           </motion.div>
+
         </div>
+
+        
 
         {/* Vision Cards */}
         <motion.div 
