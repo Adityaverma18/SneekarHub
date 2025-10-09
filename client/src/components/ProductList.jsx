@@ -87,7 +87,7 @@ const ProductList = () => {
                   ${product.price.toFixed(2)}
                 </span>
               </div>
-              <p className="text-gray-600 text-sm mt-1">
+              <p className="text-gray-600 text-sm mt-1 line-clamp-2">
                 {product.description}
               </p>
 

@@ -1,28 +1,27 @@
-// src/components/Slider.jsx
-import React, { useState, useEffect, useRef } from 'react';
-import { assetsImage, sliderAssets } from '../assets/assets';
+import React, { useState, useEffect, useRef } from "react";
+import { sliderAssets } from "../assets/assets";
+import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom"; // ✅ Added missing import
+
+// Create a motion-enhanced Link
+const MotionLink = motion.create(Link);
 
 const Slider = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const slides = sliderAssets.slides;
-
-  // Image array from imported images
-  const img = [assetsImage.slider1, assetsImage.slider2, assetsImage.image1];
-
-  // Ref for autoplay interval
+  const [currentSlide, setCurrentSlide] = useState(0);
   const intervalRef = useRef(null);
 
-  // Start autoplay
+  // Auto-slide every 5 seconds
   useEffect(() => {
     startAutoplay();
     return () => stopAutoplay();
   }, []);
 
   const startAutoplay = () => {
-    if (intervalRef.current) return; // prevent multiple intervals
+    if (intervalRef.current) return;
     intervalRef.current = setInterval(() => {
       setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    }, sliderAssets.settings.autoplaySpeed);
+    }, 5000);
   };
 
   const stopAutoplay = () => {
@@ -32,131 +31,138 @@ const Slider = () => {
     }
   };
 
-  const handleNextSlide = () => {
+  const handleNext = () => {
     stopAutoplay();
     setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     startAutoplay();
   };
 
-  const handlePrevSlide = () => {
+  const handlePrev = () => {
     stopAutoplay();
     setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
     startAutoplay();
   };
 
-  // Preload next and previous images
-  useEffect(() => {
-    const nextSlide = (currentSlide + 1) % slides.length;
-    const prevSlide = (currentSlide - 1 + slides.length) % slides.length;
-
-    [img[nextSlide], img[prevSlide]].forEach((src) => {
-      const image = new Image();
-      image.src = src;
-    });
-  }, [currentSlide]);
+  const current = slides[currentSlide];
+  const accent = sliderAssets.accentColors[current.accentColor];
 
   return (
-    <div className="relative overflow-hidden" style={{ height: '600px' }}>
-      {/* Current Slide */}
-      <div
-        key={slides[currentSlide].id}
-        className="absolute inset-0 flex justify-center items-center transition-opacity duration-500 ease-in-out opacity-100"
-      >
-        <img
-          src={img[currentSlide]}
-          alt={slides[currentSlide].alt}
-          className="max-w-full max-h-full object-contain"
-          loading="lazy"
-          onError={(e) => {
-            e.target.src = sliderAssets.fallbacks.image;
-            console.warn('Fallback image used');
-          }}
-        />
-
-        <div
-          className={`absolute inset-0 flex flex-col items-center justify-center ${sliderAssets.styles.overlay}`}
+    <div
+      className={`relative w-full h-[600px] overflow-hidden bg-gradient-to-r ${current.gradient}`}
+    >
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current.id}
+          initial={{ opacity: 0, scale: 1.02 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          className="relative lg:absolute lg:inset-0 flex flex-col lg:flex-row items-center justify-center text-center lg:text-left px-6 lg:px-20 py-10 lg:py-0"
         >
-          <h1
-            className={`text-4xl md:text-6xl font-bold ${sliderAssets.styles.textColor} mb-4`}
-          >
-            {slides[currentSlide].title}
-          </h1>
-          <p
-            className={`text-xl md:text-2xl ${sliderAssets.styles.textColor} mb-8`}
-          >
-            {slides[currentSlide].subtitle}
-          </p>
-          {slides[currentSlide].cta && (
-            <button
-              className={`py-3 px-6 rounded-lg text-lg ${sliderAssets.styles.buttonStyle}`}
+          {/* Text Section */}
+          <div className="max-w-xl z-10 space-y-4">
+            <span
+              className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${accent.badge}`}
             >
-              {slides[currentSlide].cta}
-            </button>
-          )}
-        </div>
-      </div>
+              {current.subtitle}
+            </span>
 
-      {/* Arrows */}
-      {sliderAssets.settings.showArrows && (
-        <>
-          <button
-            onClick={handlePrevSlide}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition-colors"
-            aria-label="Previous slide"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+            <h1
+              className={`text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r ${accent.gradient}`}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <button
-            onClick={handleNextSlide}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition-colors"
-            aria-label="Next slide"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-        </>
-      )}
+              {current.title}
+            </h1>
 
-      {/* Dots */}
-      {sliderAssets.settings.showDots && (
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
-          {slides.map((slide, index) => (
-            <button
-              key={slide.id}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full ${
-                index === currentSlide ? 'bg-white' : 'bg-gray-400'
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
+            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+              {current.description}
+            </p>
+
+            {/* ✅ Updated Button to MotionLink */}
+            <MotionLink
+              to="/ProductPage"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              className={`mt-4 inline-block px-6 py-3 rounded-lg text-white font-semibold bg-gradient-to-r ${accent.gradient} shadow-lg transition-all`}
+            >
+              Shop Now
+            </MotionLink>
+          </div>
+
+          {/* Image Section */}
+          <div className="flex-1 flex justify-center mt-8 lg:mt-0">
+            <motion.img
+              key={current.image}
+              src={current.image}
+              alt={current.title}
+              className="w-full max-w-md lg:max-w-2xl object-contain drop-shadow-2xl"
+              loading="lazy"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+              onError={(e) => (e.target.src = "https://placehold.co/600x400")}
             />
-          ))}
-        </div>
-      )}
+          </div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Navigation Arrows */}
+      <button
+        onClick={handlePrev}
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/70 backdrop-blur-md p-3 rounded-full shadow-md hover:bg-white transition"
+        aria-label="Previous Slide"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-6 h-6 text-gray-700"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+      </button>
+
+      <button
+        onClick={handleNext}
+        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/70 backdrop-blur-md p-3 rounded-full shadow-md hover:bg-white transition"
+        aria-label="Next Slide"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-6 h-6 text-gray-700"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 5l7 7-7 7"
+          />
+        </svg>
+      </button>
+
+      {/* Dots Indicator */}
+      <div className="absolute bottom-6 left-0 right-0 flex justify-center space-x-3">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentSlide(index)}
+            className={`w-3 h-3 rounded-full transition-all ${
+              currentSlide === index
+                ? `bg-gradient-to-r ${accent.glow}`
+                : "bg-gray-300 dark:bg-gray-600"
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          ></button>
+        ))}
+      </div>
     </div>
   );
 };

@@ -22,7 +22,7 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col px-4 py-2">
+    <div className="min-h-screen flex flex-col px-4 py-2">
       <div className="flex items-center py-2 mb-2">
         <button onClick={() => navigate(-1)} className="mr-2 p-2 text-gray-500">
           <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={2}><path d="M15 19l-7-7 7-7" /></svg>

@@ -8,6 +8,7 @@ import image3 from './images/image3.jpg'
 import image4 from './images/image4.jpg'
 import image5 from './images/image5.jpg'
 import image6 from './images/image6.jpg'
+import { Target, Heart, Zap, Award } from "lucide-react";
 
 // src/assets/assets.js
 export const assetsImage ={
@@ -17,56 +18,87 @@ export const assetsImage ={
 
 
 // Complete slider assets configuration
+
 export const sliderAssets = {
   slides: [
     {
       id: 1,
-      title: "Premium Sneakers Collection",
-      subtitle: "Limited Edition Releases",
-      cta: "Shop Now",
-      alt: "Featured sneakers with urban background",
-      featuredProduct: "Nike Airforce 1"
+      title: "Step Into Style",
+      subtitle: "New Collection 2025",
+      description:
+        "Discover the latest collection of premium sneakers. Crafted for comfort, designed for excellence.",
+      image:
+        "https://images.unsplash.com/photo-1577655197898-da78ff8bed68?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxzbmVha2VycyUyMG1vZGVybiUyMHNwb3J0fGVufDF8fHx8MTc1OTg0ODA2MXww&ixlib=rb-4.1.0&q=80&w=1080",
+      gradient:
+        "from-blue-50 via-orange-50 to-white dark:from-gray-900 dark:via-blue-950 dark:to-gray-900",
+      accentColor: "orange",
     },
     {
       id: 2,
-      title: "Summer Sports Footwear",
-      subtitle: "Up to 30% off running shoes", 
-      cta: "Explore Deals",
-      alt: "Athletic shoes on basketball court",
-      featuredProduct: "Nike Sumo 7"
+      title: "Performance Redefined",
+      subtitle: "Athletic Excellence",
+      description:
+        "Engineered for athletes, designed for champions. Experience unmatched performance and comfort.",
+      image:
+        "https://images.unsplash.com/photo-1694671793811-d745b259188b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxuaWtlJTIwc2hvZXMlMjByZWR8ZW58MXx8fHwxNzU5Nzk1MjkxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      gradient:
+        "from-red-50 via-pink-50 to-white dark:from-gray-900 dark:via-red-950 dark:to-gray-900",
+      accentColor: "red",
     },
-   
     {
       id: 3,
-      title: "New Arrival",
-      subtitle: "The wait is over",
-      cta:"Buy now",
-      alt: "Light and Comfy",
-      featuredProduct: "Addidas Flight 2"
+      title: "Urban Lifestyle",
+      subtitle: "Street Style Collection",
+      description:
+        "Make a statement with our urban sneaker collection. Where style meets the streets.",
+      image:
+        "https://images.unsplash.com/photo-1628136473110-6e95a86f4b81?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsaWZlc3R5bGUlMjBzbmVha2VycyUyMHVyYmFufGVufDF8fHx8MTc1OTg0OTA4MHww&ixlib=rb-4.1.0&q=80&w=1080",
+      gradient:
+        "from-purple-50 via-blue-50 to-white dark:from-gray-900 dark:via-purple-950 dark:to-gray-900",
+      accentColor: "purple",
+    },
+    {
+      id: 4,
+      title: "Court Champions",
+      subtitle: "Basketball Collection",
+      description:
+        "Dominate the court with our premium basketball sneakers. Engineered for peak performance.",
+      image:
+        "https://images.unsplash.com/photo-1710378844907-faa3b444997f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxiYXNrZXRiYWxsJTIwc2hvZXMlMjBjb3VydHxlbnwxfHx8fDE3NTk4NDkwODB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      gradient:
+        "from-green-50 via-teal-50 to-white dark:from-gray-900 dark:via-green-950 dark:to-gray-900",
+      accentColor: "green",
     },
   ],
-  
-  settings: {
-    autoplay: true,
-    autoplaySpeed: 5000, // 5 seconds
-    infinite: true,
-    showArrows: true,
-    showDots: true,
-    transitionSpeed: 500 // milliseconds
+
+  accentColors: {
+    orange: {
+      badge:
+        "bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400",
+      gradient: "from-blue-600 to-orange-500",
+      glow: "from-blue-500 to-orange-500",
+    },
+    red: {
+      badge:
+        "bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400",
+      gradient: "from-red-600 to-pink-500",
+      glow: "from-red-500 to-pink-500",
+    },
+    purple: {
+      badge:
+        "bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400",
+      gradient: "from-purple-600 to-blue-500",
+      glow: "from-purple-500 to-blue-500",
+    },
+    green: {
+      badge:
+        "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400",
+      gradient: "from-green-600 to-teal-500",
+      glow: "from-green-500 to-teal-500",
+    },
   },
-  
-  styles: {
-    height: "28rem", // Tailwind h-96 = 28rem
-    textColor: "text-white",
-    buttonStyle: "bg-blue-600 hover:bg-blue-700",
-    overlay: "bg-black bg-opacity-40"
-  },
-  
-  fallbacks: {
-    image: "https://placehold.co/1920x1080",
-    logo: "https://placehold.co/40x40"
-  }
 };
+
 
 // Products data
 export const products = [
@@ -74,115 +106,222 @@ export const products = [
     id: 1,
     name: 'Nike Airforce 1',
     title: "Premium Sneakers Collection",
-    description: 'Comfortable running shoes',
+    brand: 'Nike',
+    category: 'Sneakers',
+    description:
+      'The Nike Air Force 1 is an icon of street style and comfort. Originally designed for basketball, this sneaker features a soft yet durable leather upper and Nike Air cushioning for all-day comfort. Its classic silhouette and versatile colorways make it perfect for both casual wear and sporty outfits.',
     price: 99.99,
     image: assetsImage.image1,
     features: [
-      'Breathable mesh upper',
-      'Air cushioning',
-      'Lightweight design'
+      'Premium leather construction',
+      'Air cushioning for superior comfort',
+      'Perforated toe for breathability',
+      'Classic low-cut design',
+      'Durable rubber outsole for traction'
     ],
-    colors: ['White', 'Black', 'Red'],
-    sizes: ['US 7', 'US 8', 'US 9', 'US 10']
+    colors: ['white', 'black', 'red'],
+    sizes: ['US 7', 'US 8', 'US 9', 'US 10'],
+    shippingInfo: 'Free standard shipping on orders above $50. Delivered within 3–5 business days.',
+    reviews: [
+      { user: 'Alex M.', rating: 5, comment: 'Classic style, super comfortable!' },
+      { user: 'Priya S.', rating: 4, comment: 'Love them! Fit perfectly and look great.' }
+    ]
   },
   {
     id: 2,
     name: 'Nike Sumo 7',
     title: "Summer Sports Footwear",
-    description: 'Light Weight',
+    brand: 'Nike',
+    category: 'Running Shoes',
+    description:
+      'Built for everyday runners, the Nike Sumo 7 combines lightweight comfort with exceptional flexibility. Its breathable mesh upper keeps your feet cool, while the foam midsole provides lasting cushioning. Ideal for gym workouts, running, or casual wear.',
     price: 159.99,
     image: assetsImage.image2,
     features: [
-      'Breathable mesh',
-      'Shock absorption',
-      'Flexible sole'
+      'Breathable mesh upper for ventilation',
+      'Shock absorption midsole',
+      'Flexible and lightweight sole',
+      'Enhanced traction outsole for grip'
     ],
-    colors: ['Black', 'Blue', 'Gray'],
-    sizes: ['US 7', 'US 8', 'US 9', 'US 10', 'US 11']
+    colors: ['black', 'blue', 'gray'],
+    sizes: ['US 7', 'US 8', 'US 9', 'US 10', 'US 11'],
+    shippingInfo: 'Ships within 2 business days. Free returns within 30 days of purchase.',
+    reviews: [
+      { user: 'John D.', rating: 5, comment: 'Amazing comfort and lightweight feel!' },
+      { user: 'Emma L.', rating: 4, comment: 'Great for workouts, color slightly darker than shown.' }
+    ]
   },
   {
     id: 3,
-    name: 'Addidas Flight 2',
+    name: 'Adidas Flight 2',
     title: "New Arrival",
-    description: 'Track ready shoes',
+    brand: 'Adidas',
+    category: 'Sports Shoes',
+    description:
+      'The Adidas Flight 2 is engineered for athletes who value speed and agility. With an elastic lace system, enhanced cushioning, and anti-slip sole, it offers comfort and performance for every stride. Perfect for track, gym, or streetwear.',
     price: 129.99,
     image: assetsImage.image3,
     features: [
-      'Elastic laces',
-      'Air cushioning',
-      'Anti-slip sole'
+      'Elastic quick-lace system',
+      'Lightweight air cushioning',
+      'Anti-slip rubber sole',
+      'Reinforced toe protection'
     ],
-    colors: ['White', 'Red', 'black'],
-    sizes: ['US 8', 'US 9', 'US 10']
+    colors: ['white', 'red', 'black'],
+    sizes: ['US 8', 'US 9', 'US 10'],
+    shippingInfo: 'Delivered within 4–6 business days. Express shipping available.',
+    reviews: [
+      { user: 'Rohit K.', rating: 5, comment: 'Super comfortable and looks awesome!' },
+      { user: 'Sophia T.', rating: 4, comment: 'Good grip and fit, perfect for my morning runs.' }
+    ]
   },
   {
     id: 4,
     name: 'Puma RS-X',
-    description: 'Bold style meets ultimate comfort',
+    brand: 'Puma',
+    category: 'Lifestyle Sneakers',
+    description:
+      'The Puma RS-X brings bold design and ultimate comfort together. Inspired by retro running shoes, it features vibrant colorways and a chunky silhouette. Ideal for everyday wear with a statement look.',
     price: 109.99,
     image: assetsImage.image4,
-    features: ['Chunky design', 'Bold colorway', 'Rubber outsole'],
-    colors: ['Yellow', 'Black', 'White'],
-    sizes: ['US 7', 'US 8', 'US 9', 'US 10']
+    features: [
+      'Chunky retro-inspired design',
+      'Soft foam cushioning',
+      'Durable rubber outsole',
+      'Bold color combinations'
+    ],
+    colors: ['yellow', 'black', 'white'],
+    sizes: ['US 7', 'US 8', 'US 9', 'US 10'],
+    shippingInfo: 'Standard delivery in 3–5 days. Free shipping on all orders above $75.',
+    reviews: [
+      { user: 'Arjun P.', rating: 4, comment: 'Love the chunky design, feels premium!' },
+      { user: 'Lina M.', rating: 5, comment: 'Stylish and comfortable for all-day wear.' }
+    ]
   },
   {
     id: 5,
     name: 'Reebok Zig Kinetica',
-    description: 'Built for energy return and stability',
+    brand: 'Reebok',
+    category: 'Training Shoes',
+    description:
+      'The Reebok Zig Kinetica is designed for energy return and stability. Its innovative zigzag midsole absorbs impact and propels you forward, while the mesh upper ensures breathability during intense workouts.',
     price: 139.99,
     image: assetsImage.image5,
-    features: ['Energy return sole', 'Mesh upper', 'Stylish silhouette'],
-    colors: ['Blue', 'Gray'],
-    sizes: ['US 6', 'US 7', 'US 8', 'US 9']
+    features: [
+      'Energy-return ZigTech sole',
+      'Breathable mesh upper',
+      'Responsive cushioning',
+      'Supportive heel design'
+    ],
+    colors: ['blue', 'gray'],
+    sizes: ['US 6', 'US 7', 'US 8', 'US 9'],
+    shippingInfo: 'Free delivery and 30-day returns. Ships in eco-friendly packaging.',
+    reviews: [
+      { user: 'Noah B.', rating: 5, comment: 'Super bouncy sole, perfect for training!' },
+      { user: 'Kavya N.', rating: 4, comment: 'Comfortable but runs a bit large.' }
+    ]
   },
   {
     id: 6,
     name: 'New Balance 327',
-    description: 'Retro vibes with modern comfort',
+    brand: 'New Balance',
+    category: 'Casual Shoes',
+    description:
+      'Retro-inspired yet built for modern comfort, the New Balance 327 combines vintage style with a cushioned midsole and durable outsole. Great for everyday wear with jeans or activewear.',
     price: 119.99,
     image: assetsImage.image6,
-    features: ['Retro design', 'Cushioned midsole', 'Durable outsole'],
-    colors: ['Green', 'Orange', 'Black'],
-    sizes: ['US 8', 'US 9', 'US 10', 'US 11']
+    features: [
+      'Retro-inspired design',
+      'Cushioned EVA midsole',
+      'Durable traction outsole',
+      'Lightweight comfort fit'
+    ],
+    colors: ['green', 'orange', 'black'],
+    sizes: ['US 8', 'US 9', 'US 10', 'US 11'],
+    shippingInfo: 'Ships within 3–4 days. Free returns and exchanges.',
+    reviews: [
+      { user: 'David S.', rating: 5, comment: 'Looks stylish and feels great!' },
+      { user: 'Mira J.', rating: 4, comment: 'Perfect casual sneakers for everyday wear.' }
+    ]
   },
   {
     id: 7,
     name: 'Nike Air Max 270',
-    description: 'Iconic air bubble comfort',
+    brand: 'Nike',
+    category: 'Running Shoes',
+    description:
+      'The Nike Air Max 270 offers iconic Air cushioning for a soft, responsive ride. Its lightweight upper and large air unit provide style and comfort that lasts all day. Ideal for lifestyle wear or workouts.',
     price: 149.99,
     image: assetsImage.image1,
-    features: ['Visible Air unit', 'Sleek look', 'Everyday wear'],
-    colors: ['Black', 'White', 'Volt'],
-    sizes: ['US 6', 'US 8', 'US 10', 'US 12']
+    features: [
+      'Visible Air unit in heel',
+      'Lightweight mesh construction',
+      'Padded collar for comfort',
+      'Durable traction outsole'
+    ],
+    colors: ['black', 'white', 'yellow'], // Volt replaced with yellow
+    sizes: ['US 6', 'US 8', 'US 10', 'US 12'],
+    shippingInfo: 'Express shipping available. Delivered in 2–5 business days.',
+    reviews: [
+      { user: 'Yash R.', rating: 5, comment: 'Extremely comfy and stylish!' },
+      { user: 'Olivia G.', rating: 4, comment: 'Perfect for walking, slightly snug fit.' }
+    ]
   },
   {
     id: 8,
     name: 'Adidas Ultraboost 22',
-    description: 'Performance and style in one',
+    brand: 'Adidas',
+    category: 'Performance Running',
+    description:
+      'Experience ultimate energy return with the Adidas Ultraboost 22. Featuring a Primeknit upper and Boost cushioning, it delivers unmatched comfort and performance whether you’re running or walking.',
     price: 179.99,
     image: assetsImage.image2,
-    features: ['Primeknit upper', 'Boost cushioning', 'Running optimized'],
-    colors: ['Core Black', 'Cloud White'],
-    sizes: ['US 7', 'US 8', 'US 9', 'US 10', 'US 11']
+    features: [
+      'Primeknit upper for adaptive fit',
+      'Boost midsole for energy return',
+      'Torsion system for stability',
+      'Continental rubber outsole for grip'
+    ],
+    colors: ['black', 'white'], // Core Black -> black, Cloud White -> white
+    sizes: ['US 7', 'US 8', 'US 9', 'US 10', 'US 11'],
+    shippingInfo: 'Free worldwide shipping on all Ultraboost models. Delivered within 5–7 business days.',
+    reviews: [
+      { user: 'Harsh M.', rating: 5, comment: 'The best running shoes I’ve ever owned!' },
+      { user: 'Alicia K.', rating: 5, comment: 'Perfect cushioning, worth every penny.' }
+    ]
   }
 ];
+
+
 export const assets = {products};
 export const searchSuggestions = products.map(product => product.name);
 
 export const aboutData = {
   hero: {
-    title: "Our Story",
-    subtitle: "From a small sneaker collection to your favorite footwear destination"
+    title: "About Snekar Hub",
+    subtitle: " We're more than just a sneaker store. We're a community of enthusiasts, collectors, and casual wearers who believe that the right pair of shoes can change your day, your style, and your confidence."
   },
   history: {
     title: "How It All Began",
     content: [
-      "Founded in 2018, Sneekrr started as a passion project between college friends...",
-      "We noticed how hard it was to find authentic sneakers without crazy prices...",
-      "Today, we serve thousands worldwide while staying true to our roots..."
+      "Founded in 2020, Sneekar Hub started with a simple mission: to make premium sneakers accessible to everyone. What began as a small online store has grown into a thriving community of sneaker lovers.",
+      "We believe that sneakers are more than just footwear – they're a form of self-expression, a piece of culture, and a statement of who you are. That's why we carefully curate our collection to include everything from classic designs to the latest releases.",
+      "Today, we're proud to serve customers worldwide, offering authentic products, competitive prices, and exceptional customer service that keeps people coming back."
     ],
     imageKey: "slider1"
   },
+  stats : [
+  { value: "50K+", label: "Happy Customers" },
+  { value: "200+", label: "Sneaker Brands" },
+  { value: "10K+", label: "Products Sold" },
+  { value: "98%", label: "Satisfaction Rate" }
+  ],
+  values: [
+  { icon: Target, title: "Quality First", description: "We source only authentic sneakers..." },
+  { icon: Heart, title: "Customer Focused", description: "Your satisfaction is our priority." },
+  { icon: Zap, title: "Fast Delivery", description: "Quick processing and shipping..." },
+  { icon: Award, title: "Expert Curation", description: "Hand-picked collections..." }
+],
   mission: {
     title: "Our Mission",
     points: [
