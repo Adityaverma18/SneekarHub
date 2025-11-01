@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { assetsImage, products } from '../assets/assets.js'; // ⬅️ Make sure products is exported
 import { FaShoppingCart, FaUser, FaSearch } from 'react-icons/fa';
 import { AppContext } from '../context/AppContext.jsx';
-import CartDialog, { useCart } from "./CartDialog.jsx";
+import CartDialog from "./CartDialog.jsx";
+import { useCart } from "../context/CartContext.jsx";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);

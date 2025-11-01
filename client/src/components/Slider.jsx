@@ -48,7 +48,7 @@ const Slider = () => {
 
   return (
     <div
-      className={`relative w-full h-[600px] overflow-hidden bg-gradient-to-r ${current.gradient}`}
+      className={`relative w-full h-[650px] overflow-hidden bg-gradient-to-r ${current.gradient}`}
     >
       <AnimatePresence mode="wait">
         <motion.div
