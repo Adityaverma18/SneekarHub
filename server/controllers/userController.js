@@ -279,6 +279,123 @@ export const reverify = async(req,res) => {
   }
 }
 
+//===============Verify mobile number===============
+export const verifyMobileOtp = async (req, res) => {
+  try {
+    const {otp, mobileNumber } = req.body;
+    // ✅ Check input
+    if (!mobileNumber || !otp) {
+      return res.status(400).json({
+        success: false,
+        message: "Mobile number and OTP are required",
+      });
+    }
+
+    // ✅ Find user by mobile number
+    const user = await User.findOne({ mobileNumber });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User does not exist",
+      });
+    }
+
+    // ✅ Check OTP exists & not already verified
+    if (!user.mobileOtp || !user.mobileOtpExpiry) {
+      return res.status(400).json({
+        success: false,
+        message: "OTP not generated or already verified",
+      });
+    }
+
+    // ✅ Check expiry
+    if (user.mobileOtpExpiry < new Date()) {
+      return res.status(400).json({
+        success: false,
+        message: "OTP expired",
+      });
+    }
+
+    // ✅ Match OTP
+    if (user.mobileOtp !== otp) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid OTP",
+      });
+    }
+
+    // ✅ Success → Clear OTP & mark verified
+    user.mobileOtp = null;
+    user.mobileOtpExpiry = null;
+    user.isVerified = true; // ⚠️ make sure spelling matches schema
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Mobile number verified successfully",
+    });
+
+  } catch (error) {
+    console.error("Error while verifying mobile OTP", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+//===============Reverify mobile number=============
+export const resendMobileOtp = async (req, res) => {
+  try {
+    const { mobileNumber } = req.body;
+
+    if (!mobileNumber) {
+      return res.status(400).json({
+        success: false,
+        message: "Mobile number is required",
+      });
+    }
+
+    const user = await User.findOne({ mobileNumber });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User does not exist",
+      });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({
+        success: false,
+        message: "Mobile number already verified",
+      });
+    }
+
+    // 🔢 Generate new OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 min
+
+    user.mobileOtp = otp;
+    user.mobileOtpExpiry = expiry;
+    await user.save();
+
+    await sendMobileOtp(otp, mobileNumber);
+
+    return res.status(200).json({
+      success: true,
+      message: "OTP resent successfully",
+    });
+
+  } catch (error) {
+    console.error("Error at resend mobile OTP", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 //===================Logout========================
 export const logout = async(req, res) => {
@@ -350,7 +467,7 @@ export const forgotPassword = async (req, res) => {
 
       await user.save();
 
-      await sendMobileOtp(otp, mobileNumber);
+      await sendPhoneOtp(otp, mobileNumber);
 
       return res.status(200).json({
         success: true,
@@ -453,6 +570,61 @@ export const changePassword = async (req, res) => {
     }
 
     const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (!newPassword || !confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "Both new password and confirm password are required",
+      });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "New password and confirm password do not match",
+      });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.status(201).json({
+      success: true,
+      message: "Password changed successfully",
+    });
+  } catch (error) {
+    console.log("Error at changePassword", error);
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+//=================Change password Mobile Number======
+export const changePasswordMobile = async (req, res) => {
+  try {
+    const { newPassword, confirmPassword } = req.body;
+    const {mobileNumber } = req.params;
+
+    if (!mobileNumber) {
+      return res.status(400).json({
+        success: false,
+        message: "Mobile Number is required",
+      });
+    }
+
+    const user = await User.findOne({ mobileNumber });
 
     if (!user) {
       return res.status(404).json({
