@@ -1,405 +1,483 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FaApple, FaGoogle, FaFacebook, FaRegUser } from "react-icons/fa";
-import { CiMail } from "react-icons/ci";
-import { RiLockPasswordFill } from "react-icons/ri";
-import { RxCross1 } from "react-icons/rx";
-import { toast } from "react-toastify";
-import axios from "axios";
 import { AppContext } from "../context/AppContext.jsx";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const Login = () => {
-  const { setShowLogin, backendUrl, setToken, setUser } =
-    useContext(AppContext);
+import { RxCross1 } from "react-icons/rx";
+import { CiMail } from "react-icons/ci";
+import { FaRegUser, FaApple, FaGoogle, FaFacebook } from "react-icons/fa";
+import { RiLockPasswordFill } from "react-icons/ri";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { IoIosCall } from "react-icons/io";
 
-  const [authMode, setAuthMode] = useState("Login");
-  const [isLoading, setIsLoading] = useState(false);
-  const [usePhone, setUsePhone] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [otpVerified, setOtpVerified] = useState(false);
+export default function Login() {
+  const { setShowLogin, backendUrl, setToken, setUser } = useContext(AppContext);
 
-  // Form Data
+  // Mode states
+  const [mode, setMode] = useState("Login"); // "Login" or "Signup"
+  const [method, setMethod] = useState("Email"); // "Email" or "Mobile"
+
+  // Password visibility
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Form states
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
+
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
 
-  // ✅ Send OTP
+  // Mobile OTP states
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [verifiedPhone, setVerifiedPhone] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  // 🔹 SEND MOBILE OTP
   const handleSendOtp = async () => {
-    if (!phone || phone.length !== 10) {
-      toast.error("Enter a valid 10-digit phone number");
+    if (!mobileNumber || mobileNumber.length !== 10) {
+      toast.error("Enter a valid 10-digit mobile number");
       return;
     }
+
     try {
-      const { data } = await axios.post(`${backendUrl}/api/user/send-otp`, {
-        phone,
-      });
+      const { data } = await axios.post(
+        `${backendUrl}/api/v1/user/resend-mobile-otp`,
+        { mobileNumber }
+      );
+
       if (data.success) {
-        setOtpSent(true);
         toast.success("OTP sent successfully!");
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
+        setOtpSent(true);
+      } else toast.error(data.message);
+    } catch {
       toast.error("Failed to send OTP");
     }
   };
 
-  // ✅ Verify OTP
+  // 🔹 VERIFY MOBILE OTP
   const handleVerifyOtp = async () => {
-    if (!otp) {
-      toast.error("Please enter OTP");
-      return;
-    }
+    if (!otp) return toast.error("Enter OTP");
+
     try {
-      const { data } = await axios.post(`${backendUrl}/api/user/verify-otp`, {
-        phone,
-        otp,
-      });
+      const { data } = await axios.post(
+        `${backendUrl}/api/v1/user/verify-mobile-otp`,
+        { mobileNumber, otp }
+      );
+
       if (data.success) {
-        setOtpVerified(true);
-        toast.success("OTP verified successfully!");
-      } else {
-        toast.error(data.message);
-      }
-    } catch (error) {
+        toast.success("Phone Verified!");
+        setVerifiedPhone(true);
+      } else toast.error(data.message);
+    } catch {
       toast.error("Invalid OTP");
     }
   };
 
-  // ✅ Submit Handler
-  const onSubmitHandler = async (e) => {
+  // 🔹 SUBMIT HANDLER
+  const onSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLoading(true);
 
     try {
-      if (authMode === "Login") {
-        if (usePhone && !otpVerified) {
-          toast.error("Please verify OTP before login");
-          setIsLoading(false);
-          return;
-        }
-
-        const payload = usePhone ? { phone } : { email, password };
-        const { data } = await axios.post(`${backendUrl}/api/user/login`, payload);
-
-        if (data.success) {
-          setToken(data.token);
-          setUser(data.user);
-          localStorage.setItem("token", data.token);
-          if (rememberMe)
-            localStorage.setItem("rememberMe", usePhone ? phone : email);
-          setShowLogin(false);
-        } else toast.error(data.message);
-      } else {
-        if (password !== confirmPassword) {
-          toast.error("Passwords do not match!");
-          setIsLoading(false);
-          return;
-        }
-
-        if (usePhone && !otpVerified) {
-          toast.error("Please verify OTP before signup");
-          setIsLoading(false);
-          return;
-        }
-
-        const payload = usePhone
-          ? { phone, password, firstName, middleName, lastName }
-          : { email, password, firstName, middleName, lastName };
+      // ================= LOGIN =================
+      if (mode === "Login") {
+        const payload =
+          method === "Email"
+            ? { email, password }
+            : { mobileNumber, password };
 
         const { data } = await axios.post(
-          `${backendUrl}/api/user/register`,
+          `${backendUrl}/api/v1/user/loginUser`,
           payload
         );
 
         if (data.success) {
+          setToken(data.user.accesstoken);
+          setUser(data.user);
+          localStorage.setItem("token", data.user.accesstoken);
+
+          toast.success("Login Successful!");
+          setShowLogin(false);
+        } else {
+          toast.error(data.message);
+        }
+      }
+
+      // ================= SIGNUP =================
+      else {
+        if (!firstName || !lastName) {
+          toast.error("Name is required");
+          setLoading(false);
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          toast.error("Passwords do not match");
+          setLoading(false);
+          return;
+        }
+
+        if (method === "Mobile" && !verifiedPhone) {
+          toast.error("Please verify your phone number");
+          setLoading(false);
+          return;
+        }
+
+        const payload =
+          method === "Email"
+            ? { firstName, middleName, lastName, email, password }
+            : { firstName, middleName, lastName, mobileNumber, password };
+
+        const { data } = await axios.post(
+          `${backendUrl}/api/v1/user/registerUser`,
+          payload
+        );
+
+        if (data.success) {
+          toast.success(data.message);
           setToken(data.token);
           setUser(data.user);
           localStorage.setItem("token", data.token);
           setShowLogin(false);
         } else toast.error(data.message);
       }
-    } catch (error) {
-      toast.error(error.message);
+    } catch (err) {
+      toast.error(err.message);
     }
-    setIsLoading(false);
+
+    setLoading(false);
   };
 
-  // Disable scroll on background
+  // Disable scroll
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "unset";
-    };
+    return () => (document.body.style.overflow = "unset");
   }, []);
 
   return (
-    <div className="fixed inset-0 z-50 backdrop-blur-sm bg-black/30 flex justify-center items-center overflow-auto">
-      <motion.form
-        onSubmit={onSubmitHandler}
-        initial={{ opacity: 0.2, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="relative bg-white p-10 rounded-2xl text-slate-600 w-[90%] max-w-md max-h-[90vh] overflow-y-auto shadow-lg"
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex justify-center items-center p-4 overflow-auto">
+      <motion.div
+        initial={{ opacity: 0.3, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-white w-full max-w-md rounded-2xl shadow-xl p-6 relative"
       >
-        {/* Close */}
+        {/* Close Button */}
         <RxCross1
-          className="absolute top-5 right-5 cursor-pointer text-xl text-gray-500 hover:text-black"
+          className="absolute top-4 right-4 cursor-pointer text-xl text-gray-600 hover:text-black"
           onClick={() => setShowLogin(false)}
         />
 
-        {/* Header */}
-        <h1 className="text-center text-2xl font-semibold text-neutral-700 mb-1">
-          {authMode}
+        {/* Title */}
+        <h1 className="text-center text-2xl font-semibold text-neutral-800 mb-6">
+          {mode === "Login" ? "Login" : "Signup"}
         </h1>
-        <p className="text-center text-sm mb-6">
-          {authMode === "Login"
-            ? "Welcome back! Please login to your account"
-            : "Create your account to get started"}
-        </p>
 
-        {/* Signup Names */}
-        {authMode === "Signup" && (
-          <>
-            <input
-              type="text"
-              placeholder="First Name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="border rounded-full px-4 py-2 text-sm flex-1 mb-3 w-full"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Middle Name (Optional)"
-              value={middleName}
-              onChange={(e) => setMiddleName(e.target.value)}
-              className="border rounded-full px-4 py-2 text-sm flex-1 mb-3 w-full"
-            />
-            <input
-              type="text"
-              placeholder="Last Name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="border rounded-full px-4 py-2 text-sm flex-1 mb-3 w-full"
-              required
-            />
-          </>
-        )}
+        {/* Tabs */}
+        <div className="flex justify-center mb-5 gap-4">
+          <button
+            onClick={() => setMethod("Email")}
+            className={`px-4 py-2 rounded-full text-sm ${
+              method === "Email"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-600"
+            }`}
+          >
+            Email
+          </button>
 
-        {/* Email or Phone */}
-        {!usePhone ? (
-          <div className="flex items-center gap-2 border rounded-full px-4 py-2 mb-3">
-            <CiMail className="text-lg" />
-            <input
-              type="email"
-              placeholder="Email Address"
-              className="outline-none flex-1 text-sm"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-        ) : (
-          <div className="mb-3">
-            <div className="flex items-center gap-2 border rounded-full px-4 py-2 mb-2">
-              <FaRegUser className="text-lg" />
-              <input
-                type="tel"
-                placeholder="Phone Number"
-                className="outline-none flex-1 text-sm"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
-                maxLength="10"
-                required
-              />
-              {!otpSent ? (
-                <button
-                  type="button"
-                  onClick={handleSendOtp}
-                  className="text-blue-600 text-sm font-semibold hover:underline"
-                >
-                  Send OTP
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  onClick={handleSendOtp}
-                  className="text-gray-400 text-sm cursor-not-allowed"
-                  disabled
-                >
-                  OTP Sent
-                </button>
-              )}
-            </div>
+          <button
+            onClick={() => setMethod("Mobile")}
+            className={`px-4 py-2 rounded-full text-sm ${
+              method === "Mobile"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-600"
+            }`}
+          >
+            Mobile
+          </button>
+        </div>
 
-            {/* OTP Input (inline) */}
-            {otpSent && (
-              <div className="flex items-center gap-2 border rounded-full px-4 py-2">
+        {/* Form */}
+        <form onSubmit={onSubmit} className="space-y-4">
+          {/* ================= NAME (SIGNUP) ================= */}
+          {mode === "Signup" && (
+            <>
+              {/* First Name */}
+              <div className="flex items-center gap-3 border p-2 rounded-full">
+                <FaRegUser className="text-lg" />
                 <input
                   type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  placeholder="Enter OTP"
-                  className="outline-none flex-1 text-sm"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                  maxLength="6"
-                />
-                <button
-                  type="button"
-                  onClick={handleVerifyOtp}
-                  className={`text-sm font-semibold ${
-                    otpVerified
-                      ? "text-green-600 cursor-default"
-                      : "text-blue-600 hover:underline"
-                  }`}
-                  disabled={otpVerified}
-                >
-                  {otpVerified ? "Verified ✅" : "Verify"}
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Passwords */}
-        {!usePhone && (
-          <>
-            <div className="flex items-center gap-2 border rounded-full px-4 py-2 mb-3">
-              <RiLockPasswordFill className="text-lg" />
-              <input
-                type="password"
-                placeholder="Password"
-                className="outline-none flex-1 text-sm"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            {authMode === "Signup" && (
-              <div className="flex items-center gap-2 border rounded-full px-4 py-2 mb-3">
-                <RiLockPasswordFill className="text-lg" />
-                <input
-                  type="password"
-                  placeholder="Confirm Password"
-                  className="outline-none flex-1 text-sm"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="First Name"
+                  className="flex-1 outline-none"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                   required
                 />
               </div>
-            )}
-          </>
-        )}
 
-        {/* Remember me */}
-        {authMode === "Login" && (
-          <div className="flex items-center justify-between mb-3">
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
-              />
-              Remember me
-            </label>
-            <button
-              type="button"
-              className="text-sm text-blue-600 hover:underline"
-            >
-              Forgot Password?
-            </button>
-          </div>
-        )}
+              {/* Middle Name */}
+              <div className="flex items-center gap-3 border p-2 rounded-full">
+                <FaRegUser className="text-lg" />
+                <input
+                  type="text"
+                  placeholder="Middle Name (optional)"
+                  className="flex-1 outline-none"
+                  value={middleName}
+                  onChange={(e) => setMiddleName(e.target.value)}
+                />
+              </div>
 
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="w-full bg-blue-600 text-white py-2 rounded-full mt-3 hover:bg-blue-700 transition-all"
-        >
-          {isLoading ? "Please wait..." : authMode}
-        </button>
-
-        {/* Toggle Login/Signup */}
-        <p className="text-center text-sm mt-4">
-          {authMode === "Login" ? (
-            <>
-              Don’t have an account?{" "}
-              <span
-                onClick={() => setAuthMode("Signup")}
-                className="text-blue-600 cursor-pointer hover:underline"
-              >
-                Sign up
-              </span>
-            </>
-          ) : (
-            <>
-              Already have an account?{" "}
-              <span
-                onClick={() => setAuthMode("Login")}
-                className="text-blue-600 cursor-pointer hover:underline"
-              >
-                Login
-              </span>
+              {/* Last Name */}
+              <div className="flex items-center gap-3 border p-2 rounded-full">
+                <FaRegUser className="text-lg" />
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  className="flex-1 outline-none"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  required
+                />
+              </div>
             </>
           )}
-        </p>
 
-        {/* Toggle Phone/Email */}
-        <p className="text-center text-sm mt-2 text-gray-500">
-          or{" "}
-          <span
-            onClick={() => {
-              setUsePhone(!usePhone);
-              setOtpSent(false);
-              setOtpVerified(false);
-              setOtp("");
-            }}
-            className="text-blue-600 cursor-pointer hover:underline"
+          {/* ================= EMAIL MODE ================= */}
+          {method === "Email" && (
+            <>
+              <div className="flex items-center gap-3 border p-2 rounded-full">
+                <CiMail className="text-xl" />
+                <input
+                  type="email"
+                  placeholder="Email Address"
+                  className="flex-1 outline-none"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+
+                {/* SEND button only when Signup + email exists */}
+                {mode === "Signup" && email.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      try {
+                        const { data } = await axios.post(
+                          `${backendUrl}/api/v1/user/reverify`,
+                          { email }
+                        );
+
+                        if (data.success) toast.success("Verification link sent!");
+                        else toast.error(data.message);
+                      } catch {
+                        toast.error("Failed to send link");
+                      }
+                    }}
+                    className="text-blue-600 font-semibold text-sm hover:underline"
+                  >
+                    SEND
+                  </button>
+                )}
+              </div>
+
+              {mode === "Signup" && email.length > 0 && (
+                <p className="text-xs text-blue-700 pl-3">
+                  A verification link will be sent to this email.
+                </p>
+              )}
+            </>
+          )}
+
+          {/* ================= MOBILE MODE ================= */}
+          {method === "Mobile" && (
+            <>
+              <div className="flex items-center gap-3 border p-2 rounded-full">
+                <IoIosCall className="text-lg" />
+                <input
+                  type="tel"
+                  placeholder="Mobile Number"
+                  className="flex-1 outline-none"
+                  maxLength="10"
+                  value={mobileNumber}
+                  onChange={(e) =>
+                    setMobileNumber(e.target.value.replace(/\D/g, ""))
+                  }
+                  required
+                />
+
+                {mode === "Signup" &&
+                  (!otpSent ? (
+                    <button
+                      type="button"
+                      className="text-blue-600 text-sm"
+                      onClick={handleSendOtp}
+                    >
+                      Send OTP
+                    </button>
+                  ) : (
+                    <span className="text-gray-500 text-sm">OTP Sent</span>
+                  ))}
+              </div>
+
+              {mode === "Signup" && otpSent && (
+                <div className="flex items-center gap-3 border p-2 rounded-full">
+                  <input
+                    type="text"
+                    placeholder="Enter OTP"
+                    className="flex-1 outline-none"
+                    maxLength="6"
+                    value={otp}
+                    onChange={(e) =>
+                      setOtp(e.target.value.replace(/\D/g, ""))
+                    }
+                  />
+
+                  {!verifiedPhone ? (
+                    <button
+                      type="button"
+                      className="text-blue-600 text-sm"
+                      onClick={handleVerifyOtp}
+                    >
+                      Verify
+                    </button>
+                  ) : (
+                    <span className="text-green-600 font-semibold">✓</span>
+                  )}
+                </div>
+              )}
+            </>
+          )}
+
+          {/* ================= PASSWORD ================= */}
+          <div className="flex items-center gap-3 border p-2 rounded-full">
+            <RiLockPasswordFill className="text-xl" />
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              className="flex-1 outline-none"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            {showPassword ? (
+              <IoEyeOutline
+                className="text-xl cursor-pointer"
+                onClick={() => setShowPassword(false)}
+              />
+            ) : (
+              <IoEyeOffOutline
+                className="text-xl cursor-pointer"
+                onClick={() => setShowPassword(true)}
+              />
+            )}
+          </div>
+
+          {/* Confirm Password (Signup only) */}
+          {mode === "Signup" && (
+            <div className="flex items-center gap-3 border p-2 rounded-full">
+              <RiLockPasswordFill className="text-xl" />
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Confirm Password"
+                className="flex-1 outline-none"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+
+              {showPassword ? (
+                <IoEyeOutline
+                  className="text-xl cursor-pointer"
+                  onClick={() => setShowPassword(false)}
+                />
+              ) : (
+                <IoEyeOffOutline
+                  className="text-xl cursor-pointer"
+                  onClick={() => setShowPassword(true)}
+                />
+              )}
+            </div>
+          )}
+
+          {/* Remember me + Forgot Password (Login only) */}
+          {mode === "Login" && (
+            <div className="flex justify-between items-center text-sm px-2">
+              <label className="flex items-center gap-2">
+                <input type="checkbox" className="cursor-pointer" />
+                <span className="text-gray-600">Remember me</span>
+              </label>
+
+              <button
+                type="button"
+                className="text-blue-600 hover:underline"
+              >
+                Forgot Password?
+              </button>
+            </div>
+          )}
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 rounded-full bg-blue-600 text-white text-lg hover:bg-blue-700"
           >
-            {usePhone ? "Use Email instead" : "Use Phone Number instead"}
-          </span>
-        </p>
+            {loading ? "Please wait..." : mode}
+          </button>
 
-        {/* Divider */}
-        <div className="flex items-center gap-2 my-4">
-          <div className="flex-1 h-px bg-gray-300" />
-          <span className="text-xs text-gray-500">OR</span>
-          <div className="flex-1 h-px bg-gray-300" />
+          {/* Login / Signup switch at bottom */}
+          <p className="text-center text-sm mt-4">
+            {mode === "Login" ? (
+              <>
+                Don’t have an account?{" "}
+                <span
+                  className="text-blue-600 cursor-pointer hover:underline"
+                  onClick={() => setMode("Signup")}
+                >
+                  Signup
+                </span>
+              </>
+            ) : (
+              <>
+                Already have an account?{" "}
+                <span
+                  className="text-blue-600 cursor-pointer hover:underline"
+                  onClick={() => setMode("Login")}
+                >
+                  Login
+                </span>
+              </>
+            )}
+          </p>
+        </form>
+
+        {/* Social Login */}
+        <div className="text-center mt-5">
+          <p className="text-gray-500 mb-3 text-sm">Or continue with</p>
+
+          <div className="flex justify-center gap-4">
+            <button className="p-3 border rounded-full hover:bg-gray-100">
+              <FaGoogle className="text-red-500 text-xl" />
+            </button>
+
+            <button className="p-3 border rounded-full hover:bg-gray-100">
+              <FaFacebook className="text-blue-600 text-xl" />
+            </button>
+
+            <button className="p-3 border rounded-full hover:bg-gray-100">
+              <FaApple className="text-black text-xl" />
+            </button>
+          </div>
         </div>
-
-        {/* Social Logins */}
-        <div className="flex justify-center gap-4">
-          <button
-            type="button"
-            className="p-3 border rounded-full hover:bg-gray-100 transition"
-          >
-            <FaGoogle className="text-red-500 text-xl" />
-          </button>
-          <button
-            type="button"
-            className="p-3 border rounded-full hover:bg-gray-100 transition"
-          >
-            <FaFacebook className="text-blue-600 text-xl" />
-          </button>
-          <button
-            type="button"
-            className="p-3 border rounded-full hover:bg-gray-100 transition"
-          >
-            <FaApple className="text-black text-xl" />
-          </button>
-        </div>
-      </motion.form>
+      </motion.div>
     </div>
   );
-};
-
-export default Login;
+}

@@ -1,35 +1,40 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
-import { data, useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-export const AppContext = createContext()
+export const AppContext = createContext();
 
-const AppContextProvider = (props)=>{
-    const [user, setUser] = useState(false);
+const AppContextProvider = (props) => {
+    const [user, setUser] = useState(null);
     const [showLogin, setShowLogin] = useState(false);
 
-    
-    const backendUrl = import.meta.env.VITE_BACKEND_URL
-    const navigate = useNavigate()
+    const [token, setToken] = useState(localStorage.getItem("token") || "");
 
+    const backendUrl = import.meta.env.VITE_BACKEND_URL;
+    const navigate = useNavigate();
 
-    const logout = ()=>{
-        localStorage.removeItem('token')
-        setUser(null)
-    }
-    const value ={
-        user, setUser, showLogin, setShowLogin, backendUrl,
-    }
+    const logout = () => {
+        localStorage.removeItem("token");
+        setUser(null);
+        setToken("");
+    };
 
-    
+    const value = {
+        user,
+        setUser,
+        token,
+        setToken,
+        showLogin,
+        setShowLogin,
+        backendUrl,
+        logout,
+    };
 
-    return(
+    return (
         <AppContext.Provider value={value}>
             {props.children}
         </AppContext.Provider>
-    )
-}
-export default AppContextProvider
+    );
+};
 
-
+export default AppContextProvider;

@@ -6,8 +6,14 @@ const userSchema = new mongoose.Schema({
     lastName : {type: String, required: true},
     profilePic : {type: String, default : ""}, //Cloudary image url
     profilePicPublicId : {type: String, default: ""},
-    email: { type: String, unique: true, sparse: true, default: null },
-    mobileNumber: { type: String, unique: true, sparse: true, default: null },
+    email: {  type: String,
+  unique: true,
+  sparse: true,
+  default: null },
+    mobileNumber: { type: String,
+  unique: true,
+  sparse: true,
+  default: null},
     password : {type: String, required: true},
     role : 
     {
