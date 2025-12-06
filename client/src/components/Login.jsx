@@ -88,11 +88,24 @@ export default function Login() {
     try {
       // ================= LOGIN =================
       if (mode === "Login") {
+        if (method === "Email" && (!email || email.trim() === "")) {
+          toast.error("Please enter your email");
+          setLoading(false);
+          return;
+        }
+
+        if (method === "Mobile" && (!mobileNumber || mobileNumber.trim() === "")) {
+          toast.error("Please enter your mobile number");
+          setLoading(false);
+          return;
+        }
+
         const payload =
           method === "Email"
-            ? { email, password }
-            : { mobileNumber, password };
-
+            ? { email: email || undefined, password }
+            : { mobileNumber: mobileNumber || undefined, password };
+        console.log("LOGIN PAYLOAD →", payload);
+        
         const { data } = await axios.post(
           `${backendUrl}/api/v1/user/loginUser`,
           payload
@@ -102,7 +115,6 @@ export default function Login() {
           setToken(data.user.accesstoken);
           setUser(data.user);
           localStorage.setItem("token", data.user.accesstoken);
-
           toast.success("Login Successful!");
           setShowLogin(false);
         } else {
